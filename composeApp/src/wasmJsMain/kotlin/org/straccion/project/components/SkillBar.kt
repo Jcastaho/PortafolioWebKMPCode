@@ -27,10 +27,10 @@ fun SkillBar(
     animatedPercentage: Int
 ) {
     val animatedWidth by animateFloatAsState(
-        targetValue = percentage,
+        targetValue = if (animatedPercentage > 0) percentage else 0f,
         animationSpec = tween(
-            durationMillis = 3200,
-            delayMillis = 660 * index,
+            durationMillis = 2200,
+            delayMillis = 350 * index,
             easing = LinearOutSlowInEasing
         )
     )
@@ -38,8 +38,8 @@ fun SkillBar(
     val animatedPercentageValue by animateIntAsState(
         targetValue = animatedPercentage,
         animationSpec = tween(
-            durationMillis = 5200,
-            delayMillis = 560 * index,
+            durationMillis = 2200,
+            delayMillis = 360 * index,
             easing = LinearOutSlowInEasing
         )
     )
@@ -64,7 +64,6 @@ fun SkillBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(progressBarHeight)
                 .background(Theme.LightGray.color)
         ) {
             Box(

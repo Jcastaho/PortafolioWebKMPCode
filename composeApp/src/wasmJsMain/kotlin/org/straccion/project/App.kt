@@ -6,9 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import org.straccion.project.sections.AboutSection
-import org.straccion.project.sections.MainSection
-import org.straccion.project.sections.ServiceSection
+import org.straccion.project.sections.*
 
 @Composable
 fun App() {
@@ -21,6 +19,8 @@ fun App() {
             MainSection()
             AboutSection()
             ServiceSection()
+            PortafolioSection()
+            AchievementsSection()
         }
     }
 }

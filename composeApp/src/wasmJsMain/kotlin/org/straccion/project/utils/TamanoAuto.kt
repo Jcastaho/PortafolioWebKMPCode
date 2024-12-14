@@ -17,3 +17,13 @@ fun TamanoAuto(): Dp {
 fun getWindowHeight(): Float {
     return window.innerHeight.toFloat()
 }
+
+fun AnchoPantalla(): Dp {
+    val widthInPx = window.innerWidth.toFloat()
+    val density = window.devicePixelRatio.toFloat()
+
+    // Conversión a dp
+    val widthInDp = (widthInPx / density).dp
+
+    return widthInDp
+}

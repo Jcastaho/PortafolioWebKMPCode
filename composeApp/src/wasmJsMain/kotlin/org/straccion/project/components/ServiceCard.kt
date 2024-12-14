@@ -16,27 +16,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.straccion.project.models.Service
 import org.straccion.project.models.Theme
+import org.straccion.project.utils.AnchoPantalla
 import org.straccion.project.utils.Res
+import org.straccion.project.utils.TamanoAuto
 
 @Composable
 fun ServiceCard(
     service: Service
 ) {
+
     Card(
         modifier = Modifier
-            .height(350.dp)
-            .width(300.dp)
-            .padding(bottom = 26.dp),
-        elevation = 1.dp,
+            .height(400.dp)
+            .padding(end = 20.dp),
+        elevation = 4.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -45,25 +48,30 @@ fun ServiceCard(
                 contentDescription = null,
                 modifier = Modifier
                     .size(100.dp)
-                    .clip(shape = RoundedCornerShape(
-                        topStart = 20.dp,
-                        topEnd = 20.dp,
-                        bottomStart = 20.dp)) // Aquí personalizamos la forma
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = 20.dp,
+                            topEnd = 20.dp,
+                            bottomStart = 20.dp
+                        )
+                    ) // Aquí personalizamos la forma
                     .background(Theme.Secondary.color)
                     .padding(12.dp),
                 tint = Color.Unspecified
             )
-            Spacer(modifier = Modifier.padding(bottom = 26.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = service.title,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(18.dp))
                 Text(
                     text = service.description,
+                    fontSize = 14.sp
                 )
             }
         }

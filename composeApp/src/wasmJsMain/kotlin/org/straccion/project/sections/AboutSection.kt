@@ -31,6 +31,7 @@ import org.straccion.project.models.Theme
 import org.straccion.project.utils.Constants.Lorem
 import org.straccion.project.utils.Res
 import org.straccion.project.utils.TamanoAuto
+import org.straccion.project.utils.detectVisibility
 
 @Composable
 fun AboutSection() {
@@ -38,7 +39,7 @@ fun AboutSection() {
     Box(
         modifier = Modifier
             .height(screenHeight)
-            .padding(vertical = 100.dp, horizontal = 25.dp),
+            .padding(top = 100.dp, start = 25.dp, end = 25.dp),
         contentAlignment = Alignment.Center
     ) {
         AboutContent()
@@ -49,10 +50,7 @@ fun AboutSection() {
 fun AboutContent() {
     Column(
         modifier = Modifier
-            .fillMaxSize(
-//                if (breakpoint >= Breakpoint.MD) 100.percent
-//                else 90.percent
-            ),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyVerticalGrid(
@@ -95,16 +93,19 @@ fun AboutImage() {
 fun AboutMe() {
     var viewportEntered by remember { mutableStateOf(false) }
     var mouse by remember { mutableStateOf(false) }
-    val animatedPercentage = remember { mutableStateListOf(0, 0, 0, 0, 0, 0, 0) }
     val grayscaleLevel by animateFloatAsState(
         targetValue = if (mouse) 0.9f else 0.5f,
         animationSpec = tween(
-            durationMillis = 500, // Duración de la animación en milisegundos
+            durationMillis = 350, // Duración de la animación en milisegundos
             easing = FastOutSlowInEasing // Easing para una transición suave
         )
     )
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .detectVisibility { isVisible ->
+                viewportEntered = isVisible
+            },
         verticalArrangement = Arrangement.Center
     ) {
         SectionTitle(section = Section.About)
@@ -137,7 +138,7 @@ fun AboutMe() {
                 name = skills.title,
                 index = skills.ordinal,
                 percentage = skills.percentage,
-                animatedPercentage = (skills.percentage * 100).toInt()
+                animatedPercentage = if (viewportEntered) (skills.percentage * 100).toInt() else 0
             )
         }
     }
