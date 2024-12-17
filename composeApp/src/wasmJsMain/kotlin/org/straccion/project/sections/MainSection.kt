@@ -21,8 +21,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import kotlinx.browser.window
 import org.jetbrains.compose.resources.painterResource
-import org.straccion.project.components.Header
+import org.straccion.project.components.*
 import org.straccion.project.models.Theme
 import org.straccion.project.utils.Constants.Lorem
 import org.straccion.project.utils.Res
@@ -30,17 +32,38 @@ import org.straccion.project.utils.TamanoAuto
 
 @Composable
 fun MainSection() {
-    val screenHeight = TamanoAuto()
+    var screenWidth by remember { mutableStateOf(window.innerWidth) }
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(screenHeight)
+    LaunchedEffect(Unit) {
+        window.addEventListener("resize", {
+            screenWidth = window.innerWidth
+        })
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(954.dp),
+        contentAlignment = Alignment.Center // Centra todo su contenido
     ) {
         MainBackground()
-        MainContent()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight(), // Ajusta la altura al contenido
+            contentAlignment = Alignment.Center
+        ) {
+            if (screenWidth > 1270) {
+                MainContent()
+                LargeScreenLayout()
+            } else {
+                MainContentSmall()
+                SmallScreenLayout()
+            }
+        }
     }
 }
 
+//fondo
 @Composable
 fun MainBackground() {
     Image(
@@ -51,6 +74,7 @@ fun MainBackground() {
     )
 }
 
+//header con logo
 @Composable
 fun MainContent() {
     Column(
@@ -60,33 +84,66 @@ fun MainContent() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header()
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+    }
+}
+
+@Composable
+fun MainContentSmall() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 10.dp, start = 10.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                columns = GridCells.Fixed(2),
-            ) {
-                item() {
-                    Column(
-                        modifier = Modifier.padding(top = 80.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        MainText(800)
-                    }
-                }
-                item() {
-                    MainImage()
-                }
-            }
+            LeftSide()
         }
     }
 }
 
+@Composable
+fun LargeScreenLayout() {
+    Row(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceBetween, // Espacio específico entre elementos
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SocialBar(
+                modifier = Modifier.padding(26.dp),
+                isVertical = true
+            )
+            MainText(breakpoint = 1300) // Textos a la izquierda
+        }
+        MainImage(1300) // Imagen a la derecha
+    }
+}
+
+@Composable
+fun SmallScreenLayout() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 80.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        MainText(breakpoint = 480) // Textos encima
+        Spacer(modifier = Modifier.height(16.dp))
+        MainImage(breakpoint = 1000) // Imagen más pequeña debajo
+    }
+}
 
 @Composable
 fun MainText(breakpoint: Int) {
@@ -99,7 +156,7 @@ fun MainText(breakpoint: Int) {
             Text(
                 text = "Hola, yo soy",
                 style = TextStyle(
-                    fontSize = if (breakpoint >= 768) 58.sp else 48.sp,
+                    fontSize = if (breakpoint >= 1270) 58.sp else 48.sp,
                     fontWeight = FontWeight.Normal,
                     color = Theme.Primary.color,
                 )
@@ -109,7 +166,7 @@ fun MainText(breakpoint: Int) {
                     .padding(top = 20.dp),
                 text = "Juan David Castaño",
                 style = TextStyle(
-                    fontSize = if (breakpoint >= 768) 48.sp else 38.sp,
+                    fontSize = if (breakpoint >= 1270) 48.sp else 38.sp,
                     fontWeight = FontWeight.Bold,
                     color = Theme.Secondary.color,
                 )
@@ -146,7 +203,7 @@ fun MainText(breakpoint: Int) {
 }
 
 @Composable
-fun MainImage() {
+fun MainImage(breakpoint: Int) {
     var isHovered by remember { mutableStateOf(false) }
     val grayscaleLevel by animateFloatAsState(
         targetValue = if (isHovered) 0f else 1f,
@@ -157,12 +214,13 @@ fun MainImage() {
     )
 
     Column(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = Modifier.width(550.dp).height(550.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Image(
             modifier = Modifier
-                .fillMaxSize(0.8f)
+                .fillMaxSize(if (breakpoint >= 1270) 1f else 0.85f)
+                .offset(x = if (breakpoint >= 1270) (-50).dp else 15.dp)
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {

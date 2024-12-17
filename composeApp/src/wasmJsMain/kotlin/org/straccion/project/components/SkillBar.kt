@@ -30,7 +30,7 @@ fun SkillBar(
         targetValue = if (animatedPercentage > 0) percentage else 0f,
         animationSpec = tween(
             durationMillis = 2200,
-            delayMillis = 350 * index,
+            delayMillis = 260 * index,
             easing = LinearOutSlowInEasing
         )
     )
@@ -39,7 +39,7 @@ fun SkillBar(
         targetValue = animatedPercentage,
         animationSpec = tween(
             durationMillis = 2200,
-            delayMillis = 360 * index,
+            delayMillis = 270 * index,
             easing = LinearOutSlowInEasing
         )
     )

@@ -28,9 +28,8 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     sourceSets {
-        
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -43,6 +42,7 @@ kotlin {
         }
     }
 }
+
 
 tasks.register<Copy>("copyWebResources") {
     dependsOn("wasmJsBrowserDistribution")
