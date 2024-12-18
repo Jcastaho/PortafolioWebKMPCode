@@ -1,6 +1,6 @@
 package org.straccion.project.utils
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.browser.window
@@ -26,4 +26,16 @@ fun AnchoPantalla(): Dp {
     val widthInDp = (widthInPx / density).dp
 
     return widthInDp
+}
+
+@Composable
+fun rememberScreenSize(): Int {
+    var screenWidth by remember { mutableStateOf(window.innerWidth) }
+
+    LaunchedEffect(Unit) {
+        window.addEventListener("resize", {
+            screenWidth = window.innerWidth
+        })
+    }
+    return screenWidth
 }

@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.straccion.project.components.SectionTitle
@@ -32,15 +34,14 @@ import org.straccion.project.utils.Constants.Lorem
 import org.straccion.project.utils.Res
 import org.straccion.project.utils.TamanoAuto
 import org.straccion.project.utils.detectVisibility
+import org.straccion.project.utils.rememberScreenSize
 
 @Composable
 fun AboutSection() {
-    val screenHeight = TamanoAuto()
-    Box(
+    Column(
         modifier = Modifier
-            .height(screenHeight)
-            .padding(top = 100.dp, start = 25.dp, end = 25.dp),
-        contentAlignment = Alignment.Center
+            .wrapContentSize()
+            .padding(start = 15.dp, end = 15.dp),
     ) {
         AboutContent()
     }
@@ -48,40 +49,55 @@ fun AboutSection() {
 
 @Composable
 fun AboutContent() {
+    val screenWidth = rememberScreenSize()
     Column(
         modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        LazyVerticalGrid(
-            modifier = Modifier
-                .fillMaxWidth(),
-            columns = GridCells.Fixed(2),
-        ) {
-            item() {
-                AboutImage()
-            }
-            item() {
+        if (screenWidth > 1280) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .padding(16.dp), // Espaciado opcional
+                verticalAlignment = Alignment.CenterVertically, // Centrado vertical
+                horizontalArrangement = Arrangement.Center // Centrado horizontal
+            ) {
+                AboutImage(screenWidth)
+                Spacer(modifier = Modifier.width(150.dp)) // Espacio entre la imagen y el texto
                 AboutMe()
             }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(if (screenWidth >= 700) 0.8f else 1f)
+                    .padding(16.dp), // Espaciado opcional
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AboutMe()
+                Spacer(modifier = Modifier.height(20.dp)) // Espacio entre la imagen y el texto
+                //AboutImage(screenWidth)
+            }
         }
+
     }
 }
 
 @Composable
-fun AboutImage() {
+fun AboutImage(screenWidth: Int) {
+    val imageSizeDp = (((screenWidth * 1.2) * 580) / 1920).dp
+    // Aplicar límites al tamaño de la imagen
+    val size = max(300.dp, min(580.dp, imageSizeDp))
+
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.wrapContentWidth(),
         contentAlignment = Alignment.Center
     ) {
         Image(
             modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .padding(
-                    top = 35.dp,
-                    end = 35.dp,
-                    start = 35.dp
-                ),
+                .size(size),
             painter = painterResource(Res.Image.about),
             contentDescription = "About Image",
             contentScale = ContentScale.Crop

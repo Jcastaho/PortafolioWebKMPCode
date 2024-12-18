@@ -5,8 +5,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,25 +18,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import kotlinx.browser.window
 import org.jetbrains.compose.resources.painterResource
 import org.straccion.project.components.*
 import org.straccion.project.models.Theme
 import org.straccion.project.utils.Constants.Lorem
 import org.straccion.project.utils.Res
-import org.straccion.project.utils.TamanoAuto
+import org.straccion.project.utils.rememberScreenSize
 
 @Composable
 fun MainSection() {
-    var screenWidth by remember { mutableStateOf(window.innerWidth) }
-
-    LaunchedEffect(Unit) {
-        window.addEventListener("resize", {
-            screenWidth = window.innerWidth
-        })
-    }
+    val screenWidth = rememberScreenSize()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,12 +44,12 @@ fun MainSection() {
                 .wrapContentHeight(), // Ajusta la altura al contenido
             contentAlignment = Alignment.Center
         ) {
-            if (screenWidth > 1270) {
+            if (screenWidth > 1280) {
                 MainContent()
-                LargeScreenLayout()
+                LargeScreenLayout(screenWidth)
             } else {
                 MainContentSmall()
-                SmallScreenLayout()
+                SmallScreenLayout(screenWidth)
             }
         }
     }
@@ -102,16 +94,17 @@ fun MainContentSmall() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LeftSide()
+            LeftSide() // falta hacer el menu lateral
         }
     }
 }
 
 @Composable
-fun LargeScreenLayout() {
+fun LargeScreenLayout(screenWidth: Int) {
     Row(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(top = 100.dp),
         horizontalArrangement = Arrangement.SpaceBetween, // Espacio específico entre elementos
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -124,24 +117,23 @@ fun LargeScreenLayout() {
                 modifier = Modifier.padding(26.dp),
                 isVertical = true
             )
-            MainText(breakpoint = 1300) // Textos a la izquierda
+            MainText(screenWidth) // Textos a la izquierda
         }
-        MainImage(1300) // Imagen a la derecha
+        MainImage(screenWidth) // Imagen a la derecha
     }
 }
 
 @Composable
-fun SmallScreenLayout() {
+fun SmallScreenLayout(screenWidth: Int) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 80.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MainText(breakpoint = 480) // Textos encima
         Spacer(modifier = Modifier.height(16.dp))
-        MainImage(breakpoint = 1000) // Imagen más pequeña debajo
+        MainImage(screenWidth) // Imagen más pequeña debajo
     }
 }
 
@@ -156,7 +148,9 @@ fun MainText(breakpoint: Int) {
             Text(
                 text = "Hola, yo soy",
                 style = TextStyle(
-                    fontSize = if (breakpoint >= 1270) 58.sp else 48.sp,
+                    fontSize =
+                    if (breakpoint >= 800) 65.sp
+                    else 55.sp,
                     fontWeight = FontWeight.Normal,
                     color = Theme.Primary.color,
                 )
@@ -166,7 +160,9 @@ fun MainText(breakpoint: Int) {
                     .padding(top = 20.dp),
                 text = "Juan David Castaño",
                 style = TextStyle(
-                    fontSize = if (breakpoint >= 1270) 48.sp else 38.sp,
+                    fontSize =
+                    if (breakpoint >= 800) 58.sp
+                    else 48.sp,
                     fontWeight = FontWeight.Bold,
                     color = Theme.Secondary.color,
                 )
@@ -176,7 +172,7 @@ fun MainText(breakpoint: Int) {
                     .padding(top = 10.dp, bottom = 5.dp),
                 text = "Mobile & Web Developer Kotlin",
                 style = TextStyle(
-                    fontSize = 22.sp,
+                    fontSize = if (breakpoint >= 800) 24.sp else 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Theme.Secondary.color,
                 )
@@ -191,7 +187,7 @@ fun MainText(breakpoint: Int) {
                         .padding(top = 10.dp, bottom = 5.dp),
                     text = "Mi descripcion $Lorem",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = if (breakpoint >= 800) 18.sp else 16.sp,
                         fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.Normal,
                         color = Theme.Secondary.color,
@@ -212,15 +208,20 @@ fun MainImage(breakpoint: Int) {
             easing = FastOutSlowInEasing // Easing para una transición suave
         )
     )
+    val imageSizeDp = (((breakpoint * 1.3) * 580) / 1920).dp
+
+    // Aplicar límites al tamaño de la imagen
+    val size = max(300.dp, min(580.dp, imageSizeDp))
 
     Column(
-        modifier = Modifier.width(550.dp).height(550.dp),
+        modifier = Modifier
+            .size(size)
+            .offset(x = if (breakpoint > 1280) (-80).dp  else (-20).dp),
         verticalArrangement = Arrangement.Center
     ) {
         Image(
             modifier = Modifier
-                .fillMaxSize(if (breakpoint >= 1270) 1f else 0.85f)
-                .offset(x = if (breakpoint >= 1270) (-50).dp else 15.dp)
+                .fillMaxSize()
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
