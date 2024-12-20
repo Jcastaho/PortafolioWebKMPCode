@@ -17,13 +17,26 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import org.straccion.project.models.Testimonial
 import org.straccion.project.utils.Res
+import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun TestimonialCard(testimonial: Testimonial) {
+fun TestimonialCard(
+    testimonial: Testimonial
+) {
+    val screenWidth = rememberScreenSize()
+
+    val imageSizeDp = (((screenWidth * 1.3) * 350) / 1920).dp
+
+    // Aplicar límites al tamaño de la imagen
+    val size = max(120.dp, min(180.dp, imageSizeDp))
+
+
     Card(
         modifier = Modifier
             .width(550.dp)
@@ -45,7 +58,7 @@ fun TestimonialCard(testimonial: Testimonial) {
                 painter = painterResource(testimonial.image),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(180.dp)
+                    .size(size)
                     .clip(CircleShape)
             )
             Column(

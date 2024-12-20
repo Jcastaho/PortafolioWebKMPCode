@@ -33,7 +33,7 @@ fun AchievementCard(
         if (isVisible) {
             for (i in 0..targetNumber) {
                 animatedNumber = i
-                delay(90L * animatedNumber) // Controla la velocidad de la animación
+                delay(80L * animatedNumber) // Controla la velocidad de la animación
             }
         } else {
             animatedNumber = 0 // Reiniciar si no es visible

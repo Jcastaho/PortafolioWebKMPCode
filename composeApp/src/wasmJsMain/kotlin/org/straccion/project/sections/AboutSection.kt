@@ -4,22 +4,17 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
@@ -32,23 +27,21 @@ import org.straccion.project.models.Skills
 import org.straccion.project.models.Theme
 import org.straccion.project.utils.Constants.Lorem
 import org.straccion.project.utils.Res
-import org.straccion.project.utils.TamanoAuto
-import org.straccion.project.utils.detectVisibility
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun AboutSection() {
+fun AboutSection(viewportEntered: Boolean) {
     Column(
         modifier = Modifier
             .wrapContentSize()
             .padding(start = 15.dp, end = 15.dp),
     ) {
-        AboutContent()
+        AboutContent(viewportEntered)
     }
 }
 
 @Composable
-fun AboutContent() {
+fun AboutContent(viewportEntered: Boolean) {
     val screenWidth = rememberScreenSize()
     Column(
         modifier = Modifier
@@ -66,7 +59,7 @@ fun AboutContent() {
             ) {
                 AboutImage(screenWidth)
                 Spacer(modifier = Modifier.width(150.dp)) // Espacio entre la imagen y el texto
-                AboutMe()
+                AboutMe(viewportEntered)
             }
         } else {
             Column(
@@ -76,7 +69,7 @@ fun AboutContent() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AboutMe()
+                AboutMe(viewportEntered)
                 Spacer(modifier = Modifier.height(20.dp)) // Espacio entre la imagen y el texto
                 //AboutImage(screenWidth)
             }
@@ -106,8 +99,8 @@ fun AboutImage(screenWidth: Int) {
 }
 
 @Composable
-fun AboutMe() {
-    var viewportEntered by remember { mutableStateOf(false) }
+fun AboutMe(viewportEntered: Boolean) {
+
     var mouse by remember { mutableStateOf(false) }
     val grayscaleLevel by animateFloatAsState(
         targetValue = if (mouse) 0.9f else 0.5f,
@@ -118,10 +111,7 @@ fun AboutMe() {
     )
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .detectVisibility { isVisible ->
-                viewportEntered = isVisible
-            },
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Center
     ) {
         SectionTitle(section = Section.About)

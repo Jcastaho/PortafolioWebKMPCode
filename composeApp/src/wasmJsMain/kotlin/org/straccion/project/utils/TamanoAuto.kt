@@ -13,7 +13,6 @@ fun TamanoAuto(): Dp {
     return heightInDp.dp
 }
 
-
 fun getWindowHeight(): Float {
     return window.innerHeight.toFloat()
 }
@@ -31,7 +30,6 @@ fun AnchoPantalla(): Dp {
 @Composable
 fun rememberScreenSize(): Int {
     var screenWidth by remember { mutableStateOf(window.innerWidth) }
-
     LaunchedEffect(Unit) {
         window.addEventListener("resize", {
             screenWidth = window.innerWidth

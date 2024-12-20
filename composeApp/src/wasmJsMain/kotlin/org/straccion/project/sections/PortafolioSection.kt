@@ -13,15 +13,14 @@ import org.straccion.project.components.PortfolioCard
 import org.straccion.project.components.SectionTitle
 import org.straccion.project.models.Portfolio
 import org.straccion.project.models.Section
-import org.straccion.project.utils.TamanoAuto
+import org.straccion.project.utils.detectVisibility
 
 @Composable
 fun PortafolioSection() {
-    val screenHeight = TamanoAuto()
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(top = 100.dp, start = 25.dp, end = 25.dp),
+            .padding(vertical = 50.dp),
         verticalArrangement = Arrangement.Center
     ) {
         PortfolioContent()
@@ -30,6 +29,7 @@ fun PortafolioSection() {
 
 @Composable
 fun PortfolioContent() {
+    var isVisible by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -37,35 +37,49 @@ fun PortfolioContent() {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .padding(bottom = 0.dp),
+                .fillMaxWidth(0.9f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             SectionTitle(
+                modifier = Modifier.padding(start = 20.dp),
                 section = Section.Portfolio
             )
             Spacer(modifier = Modifier.height(32.dp))
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .detectVisibility { newVisibility ->
+                        isVisible = newVisibility
+                    },
                 contentAlignment = Alignment.Center
             ) {
-                PortfolioCards()
+                PortfolioCards(isVisible = isVisible)
             }
         }
     }
 }
 
 @Composable
-fun PortfolioCards() {
+fun PortfolioCards(isVisible: Boolean) {
     val listState = rememberLazyListState()
     val extendedList = List(100) { index -> Portfolio.entries[index % Portfolio.entries.size] }
+
+
+    // Se ejecuta cada cierto tiempo (en este caso, cada 3 segundos)
+    LaunchedEffect(isVisible) {
+        if (isVisible) {
+            while (true) {
+                delay(5000) // Tiempo de espera (en milisegundos)
+                val nextIndex = (listState.firstVisibleItemIndex + 1) % extendedList.size
+                listState.animateScrollToItem(nextIndex)
+            }
+        }
+    }
 
     LazyRow(
         state = listState,
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         items(extendedList) { portfolio ->
             PortfolioCard(
