@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,7 +88,6 @@ fun LeftSide(
 fun RightSide(
 
 ) {
-    var hoveredSection by remember { mutableStateOf<Section?>(null) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +102,7 @@ fun RightSide(
         Section.values().take(6).forEach { section ->
             menus(
                 section.title,
-                path = section.path
+                path = section.path,
             )
         }
     }
@@ -114,11 +114,12 @@ fun menus(
     text: String,
     path: String,
     hoveredColor: Color = Theme.Primary.color,
-    normalColor: Color = Color.Black
+    normalColor: Color = Color.Black,
+    modifier: Modifier = Modifier
 ) {
     var isHovered by remember { mutableStateOf(false) }
     Text(
-        modifier = Modifier
+        modifier = modifier
             .pointerInput(Unit) {
                 awaitPointerEventScope {
                     while (true) {
@@ -130,6 +131,8 @@ fun menus(
                     }
                 }
             }
+            .clickable {  }
+            .testTag(path)
             .padding(end = 30.dp),
         text = text,
         style = TextStyle(

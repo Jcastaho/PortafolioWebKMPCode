@@ -27,11 +27,11 @@ enum class Portfolio(
     Four(
         image = Res.Image.portfolio4,
         title = "ej4",
-        description = "ej4"
+        description = "ej4 $Lorem"
     ),
     Five(
         image = Res.Image.portfolio5,
         title = "ej5",
-        description = "ej5"
+        description = "ej5 $Lorem"
     )
 }

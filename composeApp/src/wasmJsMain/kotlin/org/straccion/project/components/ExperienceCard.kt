@@ -11,47 +11,70 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.straccion.project.models.Experience
-import org.straccion.project.models.Theme
 
 @Composable
 fun ExperienceCard(
     isActive: Boolean,
-    experience: Experience
+    experience: Experience,
+    isColumn: Boolean = false,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(0.7f)
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(26.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Descripción ocupa la mitad del ancho
-        ExperienceDescriptionKMP(
-            isActive = isActive,
-            description = experience.description,
-            modifier = Modifier.weight(1f) // Ocupa la mitad
-        )
+    if (isColumn){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            // Descripción ocupa la mitad del ancho
+            ExperienceDescriptionKMP(
+                isActive = isActive,
+                description = experience.description,
+                modifier = Modifier
+            )
 
-        // Número al centro
-        ExperienceNumberKMP(
-            isActive = isActive,
-            number = experience.number
-        )
+            // Detalles al lado del número
+            ExperienceDetailsKMP(
+                jobPosition = experience.jobPosition,
+                dateRange = "${experience.from} - ${experience.to}",
+                company = experience.company,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+        }
+    }else{
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(40.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Descripción ocupa la mitad del ancho
+            ExperienceDescriptionKMP(
+                isActive = isActive,
+                description = experience.description,
+                modifier = Modifier.weight(1f) // Ocupa la mitad
+            )
 
-        // Detalles al lado del número
-        ExperienceDetailsKMP(
-            jobPosition = experience.jobPosition,
-            dateRange = "${experience.from} - ${experience.to}",
-            company = experience.company,
-            modifier = Modifier.weight(1f) // Ocupa el resto
-        )
+            // Número al centro (encima de la línea)
+            ExperienceNumberKMP(
+                isActive = isActive,
+                number = experience.number
+            )
+
+            // Detalles al lado del número
+            ExperienceDetailsKMP(
+                jobPosition = experience.jobPosition,
+                dateRange = "${experience.from} - ${experience.to}",
+                company = experience.company,
+                modifier = Modifier.weight(1f) // Ocupa el resto
+            )
+        }
     }
 }
+
 
 @Composable
 fun ExperienceNumberKMP(
