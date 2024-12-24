@@ -20,3 +20,4 @@ fun Modifier.detectVisibility(
     }
     onVisibilityChanged(isVisible)
 }
+

@@ -17,9 +17,9 @@ import org.straccion.project.models.Section
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun ExperienceSection() {
+fun ExperienceSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(bottom = 50.dp),
         verticalArrangement = Arrangement.Center

@@ -35,5 +35,6 @@ object Res {
         val fullstack = Res.drawable.fullstack
         val link = Res.drawable.compartir
         val star = Res.drawable.estrella
+        val menu = Res.drawable.menu
     }
 }

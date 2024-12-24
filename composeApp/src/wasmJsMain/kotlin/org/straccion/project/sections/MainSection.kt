@@ -29,10 +29,13 @@ import org.straccion.project.utils.Res
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun MainSection() {
+fun MainSection(
+    onSectionClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val screenWidth = rememberScreenSize()
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(954.dp),
         contentAlignment = Alignment.Center // Centra todo su contenido
@@ -40,12 +43,12 @@ fun MainSection() {
         MainBackground()
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth()
                 .wrapContentHeight(), // Ajusta la altura al contenido
             contentAlignment = Alignment.Center
         ) {
-            if (screenWidth > 1280) {
-                MainContent()
+            if (screenWidth > 1200) {
+                MainContent(onSectionClick)
                 LargeScreenLayout(screenWidth)
             } else {
                 MainContentSmall()
@@ -68,14 +71,17 @@ fun MainBackground() {
 
 //header con logo
 @Composable
-fun MainContent() {
+fun MainContent(onSectionClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header()
+        Header(
+            onSectionClick,
+            modifier = Modifier.fillMaxWidth(0.9f)
+        )
     }
 }
 
@@ -84,17 +90,16 @@ fun MainContentSmall() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 10.dp, start = 10.dp),
+            .padding(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.CenterStart
         ) {
-            LeftSide() // falta hacer el menu lateral
+            LeftSide(visible = true)
         }
     }
 }
@@ -103,7 +108,7 @@ fun MainContentSmall() {
 fun LargeScreenLayout(screenWidth: Int) {
     Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(0.9f)
             .padding(top = 100.dp),
         horizontalArrangement = Arrangement.SpaceBetween, // Espacio específico entre elementos
         verticalAlignment = Alignment.CenterVertically
@@ -127,7 +132,7 @@ fun LargeScreenLayout(screenWidth: Int) {
 fun SmallScreenLayout(screenWidth: Int) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize(0.9f),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -208,15 +213,15 @@ fun MainImage(breakpoint: Int) {
             easing = FastOutSlowInEasing // Easing para una transición suave
         )
     )
-    val imageSizeDp = (((breakpoint * 1.3) * 580) / 1920).dp
+    val imageSizeDp = (((breakpoint * 1.3) * 600) / 1920).dp
 
     // Aplicar límites al tamaño de la imagen
-    val size = max(300.dp, min(580.dp, imageSizeDp))
+    val size = max(300.dp, min(600.dp, imageSizeDp))
 
     Column(
         modifier = Modifier
-            .size(size)
-            .offset(x = if (breakpoint > 1280) (-80).dp  else (-20).dp),
+            .size(size),
+         //   .offset(x = if (breakpoint > 1280) (-80).dp else (-20).dp),
         verticalArrangement = Arrangement.Center
     ) {
         Image(

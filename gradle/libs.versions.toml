@@ -24,6 +24,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 
 
 
+
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

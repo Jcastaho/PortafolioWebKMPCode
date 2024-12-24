@@ -11,9 +11,9 @@ import org.straccion.project.models.Achievements
 import org.straccion.project.models.Theme
 
 @Composable
-fun AchievementsSection() {
+fun AchievementsSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .background(Theme.LightGray.color)
             .padding(vertical = 50.dp),

@@ -30,9 +30,12 @@ import org.straccion.project.utils.Res
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun AboutSection(viewportEntered: Boolean) {
+fun AboutSection(
+    viewportEntered: Boolean,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentSize()
             .padding(start = 15.dp, end = 15.dp),
     ) {
@@ -49,7 +52,7 @@ fun AboutContent(viewportEntered: Boolean) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (screenWidth > 1280) {
+        if (screenWidth > 1200) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)

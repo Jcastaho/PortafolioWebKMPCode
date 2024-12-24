@@ -1,4 +1,4 @@
-package org.straccion.project.models
+package org.straccion.project.utils
 
 import kotlinx.serialization.Serializable
 

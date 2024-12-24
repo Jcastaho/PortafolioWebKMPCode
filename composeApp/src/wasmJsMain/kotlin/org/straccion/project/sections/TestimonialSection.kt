@@ -22,9 +22,9 @@ import org.straccion.project.models.Theme
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun TestimonialSection() {
+fun TestimonialSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .padding(vertical = 50.dp),
         verticalArrangement = Arrangement.Center

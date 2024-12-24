@@ -12,9 +12,9 @@ import org.straccion.project.models.Service
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun ServiceSection() {
+fun ServiceSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentSize()
             .padding(start = 15.dp, end = 15.dp),
     ) {

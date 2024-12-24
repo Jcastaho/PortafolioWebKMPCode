@@ -20,19 +20,18 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.straccion.project.components.ContactForm
 import org.straccion.project.components.SectionTitle
-import org.straccion.project.models.ContactFormData
+import org.straccion.project.utils.ContactFormData
 import org.straccion.project.models.Section
 import org.straccion.project.models.Theme
 
 @Composable
-fun ContacSection() {
+fun ContacSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .padding(vertical = 50.dp, horizontal = 50.dp),
         verticalArrangement = Arrangement.Center
@@ -109,11 +108,18 @@ fun ContacContent() {
                     .padding(top = 16.dp),
                 text = "Enviar",
                 onClick = {
-                    GlobalScope.launch {
-                        val response =  sendEmail(client, nombre, correo, mensaje)
-                        statusMessage = response.toString()
+                    if (nombre.isNotEmpty() && correo.isNotEmpty() && mensaje.isNotEmpty()) {
+                        GlobalScope.launch {
+                            val response = sendEmail(client, nombre, correo, mensaje)
+                            statusMessage = response.toString()
+                        }
+                    }else{
+//                        Text(
+//                            text = "Por favor llena correctamente todos los datos",
+//                            color = Color.Red,
+//                            modifier = Modifier.padding(top = 8.dp)
+//                        )
                     }
-
                 },
             )
             if (statusMessage.isNotEmpty()) {
@@ -122,6 +128,9 @@ fun ContacContent() {
                     color = if (statusMessage.startsWith("Error")) Color.Red else Color.Green,
                     modifier = Modifier.padding(top = 8.dp)
                 )
+                nombre = ""
+                correo = ""
+                mensaje = ""
             }
         }
     }
@@ -157,7 +166,7 @@ suspend fun sendEmail(
     name: String,
     email: String,
     message: String
-) : String {  // Retorna un String
+): String {  // Retorna un String
     val endpoint = "https://formspree.io/f/xovqzvbz"
     val formData = ContactFormData(name, email, message)  // Crear el objeto FormData
 

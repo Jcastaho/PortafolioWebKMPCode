@@ -17,21 +17,24 @@ import org.straccion.project.utils.Res
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
-fun FooterSection() {
+fun FooterSection(
+    onSectionClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth() // Cambiado de fillMaxHeight a fillMaxWidth
             .background(Theme.LightGray.color)
             .padding(vertical = 50.dp),
         horizontalAlignment = Alignment.CenterHorizontally, // Añadido para mejor centrado
         verticalArrangement = Arrangement.Center
     ) {
-        FooterContent()
+        FooterContent(onSectionClick)
     }
 }
 
 @Composable
-fun FooterContent() {
+fun FooterContent(onSectionClick: (String) -> Unit) {
     val screenWidth = rememberScreenSize()
 
     Column(
@@ -57,19 +60,27 @@ fun FooterContent() {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Section.values().take(6).forEach { section ->
+                Section.values().take(8).forEach { section ->
                     menus(
                         section.title,
-                        path = section.path
+                        path = section.path,
+                        sectionId = section.id,
+                        onSectionClick = { id ->
+                            onSectionClick(id)
+                        }
                     )
                 }
             }
         } else {
-            Section.values().take(6).forEach { section ->
+            Section.values().take(8).forEach { section ->
                 menus(
                     section.title,
                     path = section.path,
-                    modifier = Modifier.offset(x = 18.dp).padding(bottom = 10.dp)
+                    modifier = Modifier.offset(x = 18.dp).padding(bottom = 10.dp),
+                    sectionId = section.id,
+                    onSectionClick = { id ->
+                        onSectionClick(id)
+                    },
                 )
             }
         }

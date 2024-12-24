@@ -16,9 +16,9 @@ import org.straccion.project.models.Section
 import org.straccion.project.utils.detectVisibility
 
 @Composable
-fun PortafolioSection() {
+fun PortafolioSection(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .padding(vertical = 50.dp),
         verticalArrangement = Arrangement.Center
