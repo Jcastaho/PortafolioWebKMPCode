@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import org.straccion.project.models.Section
@@ -47,7 +48,7 @@ fun Header(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LeftSide(visible: Boolean = false) {
+fun LeftSide(visible: Boolean = false, onSectionClick: (String) -> Unit = {}) {
     var isHovered by remember { mutableStateOf(false) }
     var isVisibleMenu by remember { mutableStateOf(false) }
     val movimiento by animateFloatAsState(
@@ -62,12 +63,12 @@ fun LeftSide(visible: Boolean = false) {
         modifier = Modifier
             .padding(
                 end = 20.dp,
-                start = if (visible)  35.dp else 0.dp,
-                top = if (visible)  20.dp else 0.dp
+                start = if (visible) 35.dp else 0.dp,
+                top = if (visible) 20.dp else 0.dp
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (visible){
+        if (visible) {
             Icon(
                 modifier = Modifier
                     .size(45.dp)
@@ -103,11 +104,19 @@ fun LeftSide(visible: Boolean = false) {
         )
     }
     if (isVisibleMenu) {
-        MenuLateral(
-            onClose = { isVisibleMenu = false }
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .zIndex(Float.MAX_VALUE)
+        ) {
+            MenuLateral(
+                onClose = { isVisibleMenu = false },
+                onSectionClick
+            )
+        }
     }
 }
+
 
 @Composable
 fun RightSide(onSectionClick: (String) -> Unit) {

@@ -51,7 +51,7 @@ fun MainSection(
                 MainContent(onSectionClick)
                 LargeScreenLayout(screenWidth)
             } else {
-                MainContentSmall()
+
                 SmallScreenLayout(screenWidth)
             }
         }
@@ -82,25 +82,6 @@ fun MainContent(onSectionClick: (String) -> Unit) {
             onSectionClick,
             modifier = Modifier.fillMaxWidth(0.9f)
         )
-    }
-}
-
-@Composable
-fun MainContentSmall() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.Start
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            LeftSide(visible = true)
-        }
     }
 }
 
@@ -221,7 +202,7 @@ fun MainImage(breakpoint: Int) {
     Column(
         modifier = Modifier
             .size(size),
-         //   .offset(x = if (breakpoint > 1280) (-80).dp else (-20).dp),
+        //   .offset(x = if (breakpoint > 1280) (-80).dp else (-20).dp),
         verticalArrangement = Arrangement.Center
     ) {
         Image(

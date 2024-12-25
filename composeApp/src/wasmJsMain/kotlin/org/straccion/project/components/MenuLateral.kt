@@ -10,70 +10,67 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import org.straccion.project.models.Section
+import org.straccion.project.models.Theme
 import org.straccion.project.utils.rememberScreenSize
 
 @Composable
 fun MenuLateral(
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onSectionClick: (String) -> Unit
 ) {
     val screenWidth = rememberScreenSize()
     val tamaño = screenWidth / 2
+
     Box(
         modifier = Modifier
-            .width(tamaño.dp)
-            .fillMaxHeight()
-            .zIndex(1f)
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+            .clickable { onClose() }
     ) {
-        // Fondo oscuro
+        // Menú con z-index mayor
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-                .clickable { onClose() } // Cierra el menú al hacer clic en el fondo
-        )
-
-        // Contenedor del menú
-        Column(
-            modifier = Modifier
+                .width(tamaño.dp)
                 .fillMaxHeight()
-                .width(200.dp) // Ancho del menú
-                .background(Color.White) // Color de fondo
-                .padding(16.dp)
-                .align(Alignment.CenterStart) // Alineación izquierda
+                .background(Color.Black.copy(alpha = 0.9f))
         ) {
-            Text("Menú", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
-            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = "Menú",
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+                Spacer(modifier = Modifier.height(40.dp))
 
-            // Opciones del menú
-            MenuItem("Inicio", onClose)
-            MenuItem("Servicios", onClose)
-            MenuItem("Portafolio", onClose)
-            MenuItem("Contacto", onClose)
-
-            Spacer(modifier = Modifier.weight(1f))
-            Button(onClick = onClose) {
-                Text("Cerrar Menú")
+                Section.values().take(8).forEach { section ->
+                    menus(
+                        section.title,
+                        path = section.path,
+                        modifier = Modifier.padding(bottom = 25.dp, start = 10.dp),
+                        sectionId = section.id,
+                        onSectionClick = { id ->
+                            onSectionClick(id)
+                            onClose
+                        },
+                        normalColor = Color.White
+                    )
+                }
             }
         }
     }
-}
-
-
-@Composable
-fun MenuItem(text: String, onClick: () -> Unit) {
-    Text(
-        text = text,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable(onClick = onClick)
-            .background(Color(0xFFDDDDDD), shape = RoundedCornerShape(4.dp))
-            .padding(8.dp),
-        style = TextStyle(fontSize = 16.sp)
-    )
 }
